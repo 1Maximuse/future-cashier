@@ -17,6 +17,7 @@ public class OrderServiceImpl implements OrderService {
 
     private List<Order> orderList = new ArrayList<Order>();
 
+    @Override
     public Order createOrder(CreateOrderRequest createOrderRequest) {
         List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
@@ -45,6 +46,7 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    @Override
     public Order getOrderById(int id) {
         Order order = null;
         try {
@@ -55,7 +57,20 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    public List<Order> getOrders() {
-        return orderList;
+    @Override
+    public List<Order> getOrders(boolean orderbyCustomer, boolean orderByPrice) {
+        List<Order> sortedOrderList = new ArrayList<Order>(orderList);
+
+        if (orderbyCustomer) {
+            sortedOrderList.sort((a, b) -> {
+                return a.getCustomer().getName().compareTo(b.getCustomer().getName());
+            });
+        } else if (orderByPrice) {
+            sortedOrderList.sort((a, b) -> {
+                return b.getTotalPrice() - a.getTotalPrice();
+            });
+        }
+
+        return sortedOrderList;
     }
 }

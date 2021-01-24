@@ -20,8 +20,11 @@ public class ProductController {
     }
 
     @GetMapping("/orders")
-    public List<Order> getOrders() {
-        return productService.getOrders();
+    public List<Order> getOrders(
+            @RequestParam(value = "orderByCustomer", defaultValue = "false") String orderByCustomer,
+            @RequestParam(value = "orderByPrice", defaultValue = "false") String orderByPrice
+    ) {
+        return productService.getOrders(orderByCustomer.equals("true"), orderByPrice.equals("true"));
     }
 
     @PostMapping("/orders")
