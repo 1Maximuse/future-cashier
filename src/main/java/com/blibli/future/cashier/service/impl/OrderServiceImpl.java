@@ -2,12 +2,14 @@ package com.blibli.future.cashier.service.impl;
 
 import com.blibli.future.cashier.controller.model.request.CreateOrderItemRequest;
 import com.blibli.future.cashier.controller.model.request.CreateOrderRequest;
+import com.blibli.future.cashier.controller.model.response.GetOrdersResponse;
 import com.blibli.future.cashier.entity.Order;
 import com.blibli.future.cashier.entity.OrderItem;
 import com.blibli.future.cashier.service.OrderService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -58,19 +60,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrders(boolean orderbyCustomer, boolean orderByPrice) {
+    public GetOrdersResponse getOrders(boolean orderbyCustomer, boolean orderByPrice) {
         List<Order> sortedOrderList = new ArrayList<Order>(orderList);
 
         if (orderbyCustomer) {
-            sortedOrderList.sort((a, b) -> {
-                return a.getCustomer().getName().compareTo(b.getCustomer().getName());
-            });
+            sortedOrderList.sort(Comparator.comparing(a -> a.getCustomer().getName()));
         } else if (orderByPrice) {
-            sortedOrderList.sort((a, b) -> {
-                return b.getTotalPrice() - a.getTotalPrice();
-            });
+            sortedOrderList.sort((a, b) -> b.getTotalPrice() - a.getTotalPrice());
         }
 
-        return sortedOrderList;
+        return new GetOrdersResponse(sortedOrderList);
     }
 }

@@ -1,6 +1,7 @@
 package com.blibli.future.cashier.controller;
 
 import com.blibli.future.cashier.controller.model.request.CreateOrderRequest;
+import com.blibli.future.cashier.controller.model.response.GetOrdersResponse;
 import com.blibli.future.cashier.entity.Order;
 import com.blibli.future.cashier.service.impl.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class ProductController {
     }
 
     @GetMapping("/orders")
-    public List<Order> getOrders(
+    public GetOrdersResponse getOrders(
             @RequestParam(value = "orderByCustomer", defaultValue = "false") String orderByCustomer,
             @RequestParam(value = "orderByPrice", defaultValue = "false") String orderByPrice
     ) {
